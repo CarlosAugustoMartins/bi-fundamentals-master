@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  source-db:
+    image: "nerudista/dvdrental:latest"
+    container_name: source-db-container
+    ports:
+      - "5432:5432"
+    volumes:
+      - source-db-volume:/var/lib/postgresql/data
+      - source-scripts-volume:/home/biuser/scripts
+  dest-db:
+    image: "nerudista/dvdrental_dwh:latest"
+    container_name: dest-db-container
+    ports:
+      - "5434:5432"
+    volumes:
+      - dest-db-volume:/var/lib/postgresql/data
+      - dest-scripts-volume:/home/biuser/scripts
+  jupyter:
+    image: "jupyter/pyspark-notebook:latest"
+    container_name: jupyter-container
+    user: root
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./Docker-containers/jupyter:/home/jovyan/work"
+volumes:
+  source-db-volume:
+  source-scripts-volume:
+  dest-db-volume:
+  dest-scripts-volume:
